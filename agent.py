@@ -42,7 +42,7 @@ class Agent:
         u = np.clip(u, -self.args.action_max, self.args.action_max)
         u += np.random.binomial(1, random_rate, u.shape[0]).reshape(-1, 1) * (
                 np.random.uniform(low=-self.args.action_max, high=self.args.action_max,
-                                  size=(u.shape[0], 4)) - u)  # eps-greedy
+                                  size=(u.shape[0], self.args.action_shape)) - u)  # eps-greedy
         if u.shape[0] == 1:
             u = u[0]
         return u.copy()
