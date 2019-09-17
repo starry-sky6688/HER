@@ -4,11 +4,14 @@ import numpy as np
 
 class Buffer:
     def __init__(self, args, sample_func):
-        '''
-        :param env_params:
-        :param buffer_size:
-        :param sample_func: the function to convert the data to the type og her
-        '''
+        """
+        sample_func: the function to convert the data to the type og her
+
+        因为her要将经验中的goal转化成当前episode中在该经验之后达到的obs，所以需要以episode为单位来存，如果以transition
+        为单位来存，就不知道它的后面到达的obs是哪个了
+
+        """
+
         self.T = args.episode_limit
         self.size = args.buffer_size // self.T
         # memory management
@@ -40,6 +43,7 @@ class Buffer:
     
     # sample the data from the replay buffer
     def sample(self, batch_size):
+        # 这里不需要随机抽取batch_size条经验，直接拿buffer里所有的经验，在sample_func()里对经验进行转换时会进行抽取
         temp_buffers = {}
         with self.lock:
             for key in self.buffers.keys():
